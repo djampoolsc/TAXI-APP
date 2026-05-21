@@ -8,7 +8,16 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext .ts,.tsx",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "cypress open",
+    "test:e2e:headless": "cypress run",
+    "test:playwright": "playwright test",
+    "test:playwright:ui": "playwright test --ui",
+    "test:playwright:debug": "playwright test --debug",
+    "test:all": "npm run test:run && npm run test:e2e:headless && npm run test:playwright"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -24,12 +33,24 @@
   "devDependencies": {
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
+    "@types/node": "^20.10.6",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/user-event": "^14.5.1",
+    "autoprefixer": "^10.4.16",
     "eslint": "^8.56.0",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vitest": "^1.0.4",
+    "@vitest/ui": "^1.0.4",
+    "cypress": "^13.6.4",
+    "playwright": "^1.40.1",
+    "@playwright/test": "^1.40.1"
   },
   "engines": {
     "node": ">=20.0.0"
