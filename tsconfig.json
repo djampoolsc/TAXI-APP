@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "baseUrl": ".",
+    "paths": {
+      "@axiom/backend/*": ["apps/backend/src/*"],
+      "@axiom/web/*": ["apps/web/src/*"],
+      "@axiom/admin/*": ["apps/admin/*"],
+      "@axiom/ml/*": ["services/ml/src/*"],
+      "@axiom/sync/*": ["services/sync/src/*"]
+    }
+  },
+  "include": [
+    "apps/*/src/**/*",
+    "apps/*/app/**/*",
+    "services/*/src/**/*",
+    "services/ml/src/**/*"
+  ],
+  "exclude": ["node_modules", "dist", "build"]
+}

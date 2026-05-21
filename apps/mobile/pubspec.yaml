@@ -1,0 +1,77 @@
+name: axiom_mobile
+description: "Axiom Perú - Mobile App (iOS + Android)"
+
+publish_to: 'none'
+
+version: 0.0.1+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  provider: ^6.0.0
+  riverpod: ^2.4.0
+
+  # HTTP & API
+  http: ^1.1.0
+  dio: ^5.3.0
+
+  # Local storage
+  hive: ^2.2.0
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.2.0
+
+  # Database
+  sqlite3: ^3.45.0
+  drift: ^2.13.0
+
+  # Offline sync
+  pouchdb: ^0.0.1
+
+  # Maps
+  google_maps_flutter: ^2.5.0
+  mapbox_gl: ^0.16.0
+  geolocator: ^9.0.0
+
+  # UI
+  flutter_svg: ^2.0.0
+  intl: ^0.19.0
+
+  # Security
+  flutter_secure_storage: ^9.0.0
+
+  # Firebase
+  firebase_core: ^2.23.0
+  firebase_messaging: ^14.6.0
+  firebase_analytics: ^10.6.0
+
+  # ML (on-device)
+  tflite_flutter: ^0.10.0
+
+  # Audio (for panic button analysis)
+  record: ^4.4.0
+  audio_session: ^0.1.13
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
