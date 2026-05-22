@@ -1,12 +1,11 @@
 # Build stage
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY pnpm-lock.yaml ./
-COPY package.json ./
-COPY pnpm-workspace.yaml ./
+COPY tsconfig.json ./
+COPY package.json package-lock.json ./
 COPY apps/backend ./apps/backend
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
-RUN pnpm -r build
+RUN npm install --legacy-peer-deps --no-save
+RUN npm run build -w apps/backend
 
 # Runtime stage
 FROM node:20-alpine

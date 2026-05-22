@@ -11,43 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          node-version: '20'
 
-      - name: Build and push backend
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./apps/backend/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/axiom-backend:latest
+      - name: Install root dependencies
+        run: npm install
 
-      - name: Build and push web
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./apps/web/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/axiom-web:latest
+      - name: Type check all workspaces
+        run: npm run type-check
 
-      - name: Build and push admin
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./apps/admin/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/axiom-admin:latest
+      - name: Lint all workspaces
+        run: npm run lint
 
-      - name: Build and push ML
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./services/ml/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/axiom-ml:latest
+      - name: Build all workspaces
+        run: npm run build
+

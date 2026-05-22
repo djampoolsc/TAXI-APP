@@ -5,14 +5,14 @@ on:
     paths:
       - 'apps/backend/**'
       - 'package.json'
-      - 'pnpm-workspace.yaml'
+      - 'package-lock.json'
   push:
     branches:
       - main
     paths:
       - 'apps/backend/**'
       - 'package.json'
-      - 'pnpm-workspace.yaml'
+      - 'package-lock.json'
 
 jobs:
   lint-and-test:
@@ -35,30 +35,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Lint
-        run: pnpm -C apps/backend lint
+        run: npm run lint -w apps/backend
 
       - name: Type check
-        run: pnpm -C apps/backend type-check
+        run: npm run type-check -w apps/backend
 
       - name: Test
-        run: pnpm -C apps/backend test
+        run: npm run test -w apps/backend
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/axiom_test
 
       - name: Build
-        run: pnpm -C apps/backend build
+        run: npm run build -w apps/backend

@@ -6,7 +6,7 @@ on:
       - 'apps/web/**'
       - 'apps/admin/**'
       - 'package.json'
-      - 'pnpm-workspace.yaml'
+      - 'package-lock.json'
   push:
     branches:
       - main
@@ -14,7 +14,7 @@ on:
       - 'apps/web/**'
       - 'apps/admin/**'
       - 'package.json'
-      - 'pnpm-workspace.yaml'
+      - 'package-lock.json'
 
 jobs:
   web-lint-and-build:
@@ -22,47 +22,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Lint Web
-        run: pnpm -C apps/web lint || true
+        run: npm run lint -w apps/web || true
 
       - name: Build Web
-        run: pnpm -C apps/web build
+        run: npm run build -w apps/web
 
   admin-lint-and-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Lint Admin
-        run: pnpm -C apps/admin lint || true
+        run: npm run lint -w apps/admin || true
 
       - name: Build Admin
-        run: pnpm -C apps/admin build
+        run: npm run build -w apps/admin
