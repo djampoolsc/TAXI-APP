@@ -78,6 +78,7 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/axiom_dev
       REDIS_URL: redis://redis:6379
       MONGODB_URL: mongodb://admin:password@mongodb:27017
+      JWT_SECRET: axiom-taxi-jwt-secret-key-2024
     ports:
       - "3000:3000"
     restart: on-failure
@@ -89,6 +90,8 @@ services:
     container_name: axiom_web
     depends_on:
       - backend
+    environment:
+      BACKEND_URL: http://backend:3000
     ports:
       - "80:80"
     restart: on-failure

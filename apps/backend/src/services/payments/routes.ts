@@ -7,11 +7,16 @@ const router = Router();
 
 // POST /api/v1/payments/process - Process payment (MOCKED)
 router.post('/process', async (req: Request, res: Response) => {
+  let inTransaction = false;
   try {
     const { ride_id, amount, method } = req.body;
 
     if (!ride_id || !amount || !method) {
       throw new BadRequest('Missing required fields');
+    }
+
+    if (typeof amount !== 'number' || amount <= 0) {
+      throw new BadRequest('amount must be a positive number');
     }
 
     // Validate payment method
@@ -20,8 +25,20 @@ router.post('/process', async (req: Request, res: Response) => {
       throw new BadRequest('Invalid payment method');
     }
 
+    const rideResult = await pool.query('SELECT id, payment_status FROM rides WHERE id = $1', [ride_id]);
+    if (rideResult.rows.length === 0) {
+      throw new BadRequest('Ride not found');
+    }
+
+    if (rideResult.rows[0].payment_status === 'success') {
+      throw new BadRequest('Ride payment already processed');
+    }
+
     const paymentId = uuidv4();
     const transactionId = `TXN_${Date.now()}`;
+
+    await pool.query('BEGIN');
+    inTransaction = true;
 
     // Mock payment processing (always successful for MVP)
     const result = await pool.query(
@@ -31,17 +48,23 @@ router.post('/process', async (req: Request, res: Response) => {
       [paymentId, ride_id, amount, method, transactionId]
     );
 
-    // Update ride payment status
-    await pool.query(
-      'UPDATE rides SET payment_status = $1, payment_method = $2 WHERE id = $3',
-      ['success', method, ride_id]
-    );
+    await pool.query('UPDATE rides SET payment_status = $1, payment_method = $2 WHERE id = $3', [
+      'success',
+      method,
+      ride_id,
+    ]);
+
+    await pool.query('COMMIT');
+    inTransaction = false;
 
     res.status(201).json({
       payment: result.rows[0],
       message: 'Payment processed successfully',
     });
   } catch (err) {
+    if (inTransaction) {
+      await pool.query('ROLLBACK');
+    }
     throw err;
   }
 });
@@ -70,16 +93,39 @@ router.get('/ride/:ride_id', async (req: Request, res: Response) => {
 
 // POST /api/v1/payments/refund - Refund payment
 router.post('/refund', async (req: Request, res: Response) => {
+  let inTransaction = false;
   try {
     const { payment_id } = req.body;
+
+    if (!payment_id) {
+      throw new BadRequest('payment_id is required');
+    }
+
+    await pool.query('BEGIN');
+    inTransaction = true;
 
     const result = await pool.query(
       `UPDATE payments SET status = 'refunded' WHERE id = $1 RETURNING *`,
       [payment_id]
     );
 
+    if (result.rows.length === 0) {
+      throw new BadRequest('Payment not found');
+    }
+
+    await pool.query('UPDATE rides SET payment_status = $1 WHERE id = $2', [
+      'failed',
+      result.rows[0].ride_id,
+    ]);
+
+    await pool.query('COMMIT');
+    inTransaction = false;
+
     res.json({ payment: result.rows[0], message: 'Payment refunded' });
   } catch (err) {
+    if (inTransaction) {
+      await pool.query('ROLLBACK');
+    }
     throw err;
   }
 });

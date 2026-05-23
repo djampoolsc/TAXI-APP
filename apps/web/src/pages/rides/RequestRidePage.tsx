@@ -64,11 +64,7 @@ export default function RequestRidePage() {
                 type="text"
                 placeholder="Ingresa tu destino..."
                 value={destination}
-                onChange={(e) => {
-                  if (e.target.value) {
-                    setDestination(e.target.value);
-                  }
-                }}
+                onChange={(e) => setDestination(e.target.value)}
                 icon="📍"
               />
             </div>

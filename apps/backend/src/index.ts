@@ -4,11 +4,12 @@ import helmet from 'helmet';
 import 'express-async-errors';
 import dotenv from 'dotenv';
 import pinoHttp from 'pino-http';
+import http from 'http';
 
-import { initializeDatabase } from './config/database';
+import { initializeDatabase, getDatabase } from './config/database';
 import { initializeRedis } from './config/redis';
 import { errorHandler } from './middleware/errorHandler';
-import { authMiddleware } from './middleware/auth';
+import { initializeSocketIO } from './services/gps/socketio';
 
 // Import service routes
 import authRoutes from './services/auth/routes';
@@ -20,6 +21,7 @@ import emergencyRoutes from './services/emergency/routes';
 dotenv.config();
 
 const app: Express = express();
+const httpServer = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -65,13 +67,18 @@ app.use(errorHandler);
 async function startServer() {
   try {
     await initializeDatabases();
+    const db = getDatabase();
 
-    app.listen(PORT, () => {
+    // Initialize Socket.io
+    initializeSocketIO(httpServer, db);
+
+    httpServer.listen(PORT, () => {
       console.log(`
 ╔════════════════════════════════════╗
 ║  Axiom Backend API                 ║
 ║  Running on port ${PORT}              ║
 ║  Environment: ${process.env.NODE_ENV || 'development'}   ║
+║  WebSocket: ws://localhost:${PORT}   ║
 ╚════════════════════════════════════╝
       `);
     });

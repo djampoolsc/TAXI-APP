@@ -169,12 +169,10 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Demo Credentials */}
+        {/* Login Help */}
         <div className="mt-6 bg-orange-50 border border-orange-200 rounded-xl p-4 text-center">
-          <p className="text-xs text-gray-600">
-            <span className="font-semibold text-amber-600">Demo:</span><br/>
-            correo@ejemplo.com<br/>
-            password123
+          <p className="text-xs text-gray-700">
+            Si aun no tienes cuenta, crea una en <span className="font-semibold text-amber-700">Registro</span>
           </p>
         </div>
 

@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { pool } from '../../config/database';
 import { BadRequest, Unauthorized } from '../../middleware/errorHandler';
 import { generateToken, generateRefreshToken } from '../../middleware/auth';
-import { User, UserType } from '../../types';
+import { UserType } from '../../types';
 
 const router = Router();
 
@@ -47,10 +48,18 @@ router.post('/register', async (req: Request, res: Response) => {
     // Create user
     const userId = uuidv4();
     const result = await pool.query(
-      `INSERT INTO users (id, email, phone, document_id, user_type, kyc_status, reputation_score, status, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, 5.0, 'active', NOW(), NOW())
+      `INSERT INTO users (id, email, phone, password_hash, document_id, user_type, kyc_status, reputation_score, status, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 5.0, 'active', NOW(), NOW())
        RETURNING id, email, phone, user_type, created_at`,
-      [userId, email, phone, document_id || null, user_type, user_type === 'driver' ? 'pending' : 'verified']
+      [
+        userId,
+        email,
+        phone,
+        hashedPassword,
+        document_id || null,
+        user_type,
+        user_type === 'driver' ? 'pending' : 'verified',
+      ]
     );
 
     const user = result.rows[0];
@@ -114,8 +123,12 @@ router.post('/refresh', async (req: Request, res: Response) => {
       throw new BadRequest('Refresh token required');
     }
 
-    // Verify refresh token (simplified - should store in Redis)
-    const userId = refresh_token.split('.')[0]; // Placeholder
+    const decoded = jwt.verify(refresh_token, process.env.JWT_SECRET!) as { userId?: string };
+    const userId = decoded.userId;
+
+    if (!userId) {
+      throw new Unauthorized('Invalid refresh token');
+    }
 
     const result = await pool.query('SELECT id, email, user_type FROM users WHERE id = $1', [userId]);
 

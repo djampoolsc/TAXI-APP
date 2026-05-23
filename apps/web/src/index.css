@@ -10,6 +10,9 @@
   --primary-dark: #FF8C00;
   --primary-light: #FFB84D;
   --secondary: #FF6B35;
+  --background-start: #fff7eb;
+  --background-mid: #ffffff;
+  --background-end: #ffedd5;
 }
 
 * {
@@ -24,10 +27,17 @@ html, body, #root {
 }
 
 body {
-  background: linear-gradient(135deg, #FFA500 0%, #FFD580 25%, #FFFFFF 50%, #FFB84D 75%, #FFA500 100%);
-  background-size: 400% 400%;
+  background: linear-gradient(140deg, var(--background-start) 0%, var(--background-mid) 50%, var(--background-end) 100%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(600px circle at 10% 10%, rgba(255, 165, 0, 0.18), transparent 40%),
+    radial-gradient(800px circle at 90% 90%, rgba(255, 107, 53, 0.12), transparent 45%),
+    linear-gradient(140deg, var(--background-start) 0%, var(--background-mid) 50%, var(--background-end) 100%);
 }
 
 /* Custom Tailwind Components */

@@ -233,20 +233,22 @@ docker logs axiom_postgres
 
 ```bash
 # Ver estructura del workspace
-pnpm list -r --depth=0
+npm list --depth=0
 
 # Limpiar node_modules y reinstalar
-pnpm clean
-pnpm install
+# Limpiar todo (use with caution)
+rm -rf node_modules
+rm -f package-lock.json
+npm install
 
 # Build production
-pnpm build
+npm run build
 
 # Actualizar dependencias
-pnpm update
+npm update
 
 # Encontrar vulnerabilidades
-pnpm audit
+npm audit
 
 # Ver archivos cambiados (git)
 git status

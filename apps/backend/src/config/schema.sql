@@ -82,7 +82,7 @@ CREATE TABLE payments (
   ride_id UUID REFERENCES rides(id),
   amount DECIMAL(10, 2) NOT NULL,
   method VARCHAR(50), -- 'yape', 'plin', 'card', 'wallet'
-  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'success', 'failed')),
+  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'success', 'failed', 'refunded')),
   transaction_id VARCHAR(255),
   created_at TIMESTAMP DEFAULT NOW()
 );

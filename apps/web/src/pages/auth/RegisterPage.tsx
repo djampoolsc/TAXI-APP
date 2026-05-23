@@ -21,8 +21,8 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
 
-    if (formData.password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres');
+    if (formData.password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres');
       return;
     }
 
@@ -31,8 +31,8 @@ export default function RegisterPage() {
       const response = await authService.register(
         formData.email,
         formData.password,
-        formData.user_type as 'passenger' | 'driver',
-        formData.phone
+        formData.phone,
+        formData.user_type as 'passenger' | 'driver'
       );
       setToken(response.data.token);
       navigate(formData.user_type === 'driver' ? '/driver/dashboard' : '/rides');

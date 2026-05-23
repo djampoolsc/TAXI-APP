@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -8,6 +8,13 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+type UserType = 'passenger' | 'driver';
 
 // Add token to requests
 api.interceptors.request.use((config) => {
@@ -19,21 +26,21 @@ api.interceptors.request.use((config) => {
 });
 
 export const authService = {
-  register: (email: string, password: string, phone: string, user_type: string) =>
+  register: (email: string, password: string, phone: string, user_type: UserType) =>
     api.post('/auth/register', { email, password, phone, user_type }),
   login: (email: string, password: string) => api.post('/auth/login', { email, password }),
   refresh: (refresh_token: string) => api.post('/auth/refresh', { refresh_token }),
 };
 
 export const ridesService = {
-  request: (passenger_id: string, origin: any, destination: any) =>
+  request: (passenger_id: string, origin: Coordinates, destination: Coordinates) =>
     api.post('/rides/request', { passenger_id, origin, destination }),
   getActive: (user_id: string, user_type: string) =>
     api.get('/rides/active/list', { params: { user_id, user_type } }),
   accept: (ride_id: string, driver_id: string) =>
     api.post(`/rides/${ride_id}/accept`, { driver_id }),
-  complete: (ride_id: string, fare_amount: number) =>
-    api.post(`/rides/${ride_id}/complete`, { fare_amount }),
+  complete: (ride_id: string, fare_amount: number, driver_id: string) =>
+    api.post(`/rides/${ride_id}/complete`, { fare_amount, driver_id }),
 };
 
 export const paymentsService = {

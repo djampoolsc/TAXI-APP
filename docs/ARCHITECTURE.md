@@ -224,9 +224,9 @@ Local Database (SQLite/PouchDB)
 
 ### Local Development
 ```bash
-pnpm docker:up          # PostgreSQL, Redis, MongoDB, CouchDB
-pnpm install            # Dependencies
-pnpm dev                # All services
+npm run docker:up       # PostgreSQL, Redis, MongoDB, CouchDB
+npm install             # Dependencies
+npm run dev             # All services
 ```
 
 ### CI/CD Pipeline (GitHub Actions)
@@ -303,7 +303,7 @@ tag release → deploy production
 | 2026-01 | Flutter para mobile | Single codebase, performance, community |
 | 2026-01 | PostgreSQL + PostGIS | Geo queries, ACID, ecosystem |
 | 2026-01 | Node.js backend | Event-driven, non-blocking, team expertise |
-| 2026-01 | Monorepo (pnpm) | Shared types, coordinated releases |
+| 2026-01 | Monorepo (npm) | Shared types, coordinated releases |
 | 2026-01 | CouchDB para sync | Offline-first, conflict resolution |
 
 ## References

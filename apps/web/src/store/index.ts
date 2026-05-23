@@ -1,9 +1,27 @@
 import { create } from 'zustand';
 
+type UserType = 'passenger' | 'driver';
+
+interface AuthUser {
+  id: string;
+  email: string;
+  user_type: UserType;
+}
+
+interface Ride {
+  id: string;
+  passenger_id: string;
+  driver_id?: string;
+  origin?: { latitude: number; longitude: number };
+  destination?: { latitude: number; longitude: number };
+  status: 'requested' | 'accepted' | 'in_progress' | 'completed' | 'cancelled';
+  fare_amount?: number;
+}
+
 interface AuthStore {
-  user: any;
+  user: AuthUser | null;
   token: string | null;
-  setUser: (user: any) => void;
+  setUser: (user: AuthUser | null) => void;
   setToken: (token: string) => void;
   logout: () => void;
 }
@@ -23,11 +41,11 @@ export const useAuthStore = create<AuthStore>((set) => ({
 }));
 
 interface RideStore {
-  activeRide: any;
-  rides: any[];
-  setActiveRide: (ride: any) => void;
-  setRides: (rides: any[]) => void;
-  updateRide: (ride: any) => void;
+  activeRide: Ride | null;
+  rides: Ride[];
+  setActiveRide: (ride: Ride | null) => void;
+  setRides: (rides: Ride[]) => void;
+  updateRide: (ride: Ride) => void;
 }
 
 export const useRideStore = create<RideStore>((set) => ({

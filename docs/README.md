@@ -13,6 +13,30 @@ Axiom Perú es una plataforma tecnológica que redefine el transporte urbano y p
 - **Transparencia**: Desglose completo de tarifas antes de confirmar viaje
 - **Pagos Múltiples**: Yape, Plin, Tarjetas, Billetera Axiom, SMS fallback
 - **Formalización Progresiva**: Axiom Aliado para conductores
+- **🔴 Real-time GPS**: Rastreo en vivo con Socket.io + Redis Pub/Sub
+
+## 🔴 Real-time GPS (NEW)
+
+**Ya implementado:**
+- Socket.io server con Redis adapter para multi-instancia
+- Eventos GPS: driver broadcast → passenger tracking
+- Historial de rutas almacenado en Redis
+- Autenticación JWT para Socket.io
+- React hooks para cliente web (`useRealtimeGPS`, `useDriverGPS`)
+- Flutter ejemplo para mobile
+- E2E tests completos
+
+**Quick Start:**
+```bash
+cd apps/backend
+npm install
+npm run dev  # Inicia Socket.io en ws://localhost:3000
+
+# En otra terminal
+npm run test:gps-e2e  # Ejecutar tests
+```
+
+📖 Ver [GPS_QUICKSTART.md](./GPS_QUICKSTART.md) o [REALTIME_GPS.md](./REALTIME_GPS.md) para detalles completos.
 
 ## 🛠️ Stack Tecnológico
 
@@ -43,22 +67,22 @@ Axiom Perú es una plataforma tecnológica que redefine el transporte urbano y p
 
 ### Requisitos previos
 - Node.js 20+
-- pnpm 8+
+- npm 10+
 - Docker + Docker Compose
 - Python 3.11+ (opcional, para ML)
 
 ### Setup local
 
-1. **Clonar repositorio y instalar dependencias**
+1. **Clonar repositorio e instalar dependencias**
    ```bash
    git clone <repo>
    cd TAXI-APP
-   pnpm install
+   npm install
    ```
 
 2. **Levantar stack de desarrollo (Docker)**
    ```bash
-   pnpm docker:up
+   npm run docker:up
    ```
    Esto levanta: PostgreSQL + PostGIS, Redis, MongoDB, CouchDB
 
@@ -70,7 +94,7 @@ Axiom Perú es una plataforma tecnológica que redefine el transporte urbano y p
 
 4. **Correr aplicaciones en desarrollo**
    ```bash
-   pnpm dev
+   npm run dev
    ```
    - Backend: http://localhost:3000
    - Web: http://localhost:3001
@@ -79,12 +103,12 @@ Axiom Perú es una plataforma tecnológica que redefine el transporte urbano y p
 ### Scripts útiles
 
 ```bash
-pnpm build       # Build all apps
-pnpm lint        # Lint all apps
-pnpm test        # Run tests
-pnpm format      # Format code
-pnpm docker:logs # Ver logs de contenedores
-pnpm docker:down # Detener servicios
+npm run build       # Build all apps
+npm run lint        # Lint all apps
+npm test            # Run tests
+npm run format      # Format code
+npm run docker:logs # Ver logs de contenedores
+npm run docker:down # Detener servicios
 ```
 
 ## 📁 Estructura del Proyecto

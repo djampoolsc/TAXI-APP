@@ -42,7 +42,7 @@ export interface Payment {
   ride_id: string;
   amount: number;
   method: 'yape' | 'plin' | 'card' | 'wallet';
-  status: 'pending' | 'success' | 'failed';
+  status: 'pending' | 'success' | 'failed' | 'refunded';
   transaction_id: string;
   created_at: Date;
 }

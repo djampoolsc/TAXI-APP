@@ -122,8 +122,8 @@ docs(setup): add troubleshooting section
 ### Style Guide
 
 - **Lenguaje:** TypeScript > JavaScript (type safety)
-- **Formatting:** Prettier (check: `pnpm format`)
-- **Linting:** ESLint (`pnpm lint`)
+- **Formatting:** Prettier (check: `npm run format`)
+- **Linting:** ESLint (`npm run lint`)
 - **Indentation:** 2 spaces
 
 ### Convenciones de Naming
@@ -243,15 +243,15 @@ Reviewers verifican:
 
 ```bash
 # Verificar que todo compila y pasa tests
-pnpm build
-pnpm test
+npm run build
+npm test
 
 # Checkear ESLint y format
-pnpm lint
-pnpm format --check
+npm run lint
+npm run format --check
 
 # Type checking
-pnpm type-check
+npm run type-check
 ```
 
 ### Performance Profiling
@@ -301,7 +301,7 @@ function calculateFare(
 - [ ] Todos tests passing
 - [ ] Changelog actualizado
 - [ ] Version bumped (semver)
-- [ ] Security audit passed (`pnpm audit`)
+- [ ] Security audit passed (`npm audit`)
 - [ ] Performance benchmarks OK
 - [ ] Documentación actualizada
 
